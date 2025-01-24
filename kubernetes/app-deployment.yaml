@@ -1,1 +1,33 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 1  # Un seul pod pour commencer
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+        - name: web-app
+          image: bastosjt/mon-app:2.0  # L'image de l'application
+          ports:
+            - containerPort: 3000  # Le port d'écoute à l'intérieur du pod
+          env:
+            - name: DB_HOST
+              value: "mysql-service"  # Nom du service MySQL dans Kubernetes
+            - name: DB_USER
+              value: "bastos"  # Utilisateur de la base de données
+            - name: DB_PASSWORD
+              value: "bastos"  # Mot de passe de l'utilisateur
+            - name: DB_NAME
+              value: "mydatabase"  # Nom de la base de données
+      # Ajout d'un volume pour la persistance des données si nécessaire
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc  # Le PVC lié pour MySQL
