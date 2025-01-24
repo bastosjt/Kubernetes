@@ -1,1 +1,132 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Kubernetes</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #3c3c3c;
+            color: white;
+            width: 100%;
+            padding: 1rem 0;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar h1{
+            margin: 0;
+            font-size: 2rem;
+        }
+        .navbar_content{
+            display: flex;
+            flex-direction: column;
+            align-items: baseline;
+            margin-left: 15px;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            font-size: 1.5rem;
+            font-weight: 100;
+            margin: 0;
+        }
+        .form-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1rem;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png" width="75px">
+        <div class="navbar_content">
+            <h1>Projet Kubernetes</h1>
+            <p>Réalisé par Charles CLERC et Bastien JAMET</p>
+        </div>
+    </div>
+    <div class="content">
+        <h2>Liste des utilisateurs</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Les données seront ajoutées ici -->
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        function fetchUsers() {
+            fetch('/get-users')
+                .then(response => response.json())
+                .then(users => {
+                    const tableBody = document.getElementById('userTableBody');
+                    tableBody.innerHTML = '';
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.nom}</td>
+                            <td>${user.prenom}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des utilisateurs:', error);
+                });
+        }
+        fetchUsers();
+    </script>
+    
+</body>
+</html>
