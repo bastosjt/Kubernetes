@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web-app:
+    image: bastosjt/mon-app:2.0
+    container_name: web-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Port local : Port dans le conteneur
+    environment:
+      DB_HOST: mysql
+      DB_USER: bastos
+      DB_PASSWORD: bastos
+      DB_NAME: mydatabase
+    depends_on:
+      - mysql
+    networks:
+      - bastos-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: bastos
+      MYSQL_USER: bastos
+      MYSQL_PASSWORD: bastos
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3306:3306"  # Port local : Port dans le conteneur
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - bastos-network
+
+volumes:
+  mysql-data:
+
+networks:
+  bastos-network:
+    driver: bridge
